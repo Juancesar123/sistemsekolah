@@ -2,19 +2,19 @@
  @push('sectionheader')
  <section class="content-header">
     <h1>
-    Siswa
-    <small>siswa</small>
+    Guru
+    <small>Guru</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Siswa</li>
+        <li class="active">Guru</li>
     </ol>
 </section>
 @endpush
 @extends('layouts.dashboard')
 @section('content')
-    <div class="box box-primary" ng-app="siswaapp">
-    <div ng-controller="siswactrl">
+    <div class="box box-primary" ng-app="guruapp">
+    <div ng-controller="guructrl">
         <div class="box-header">
             <button class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i> Tambah Data</button>
         </div>
@@ -25,7 +25,7 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Input Data Siswa</h4>
+                    <h4 class="modal-title">Input Data Guru</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -33,12 +33,8 @@
                         <input type="text" class="form-control" ng-model="nama">
                     </div>
                     <div class="form-group">
-                        <label>Email:</label>
-                        <input type="text" class="form-control" ng-model="email">
-                    </div>
-                    <div class="form-group">
-                        <label>Kelas:</label>
-                        <input type="text" class="form-control" ng-model="kelas">
+                        <label>Nomor Telpon:</label>
+                        <input type="text" class="form-control" ng-model="nomortelpon">
                     </div>
                     <div class="form-group">
                         <label>Jenis Kelamin:</label>
@@ -87,22 +83,22 @@
             <table class="table bordered-stripped">
                 <thead>
                     <th>Nama</th>
-                    <th>Kelas</th>
                     <th>Alamat</th>
                     <th>Jenis Kelamin</th>
                     <th>Tempat Lahir</th>
                     <th>Tanggal Lahir</th>
+                    <th>Nomor Telpon</th>
                     <th>Foto</th>
                     <th>Action</th>
                 </thead>
                 <tbody>
                     <tr ng-repeat="item in data">
-                        <td>@{{item.nama}}</td>
-                        <td>@{{item.kelas}}</td>
+                        <td>@{{item.namaguru}}</td>
                         <td>@{{item.alamat}}</td>
                         <td>@{{item.jeniskelamin}}</td>
                         <td>@{{item.tempatlahir}}</td>
                         <td>@{{item.tanggallahir}}</td>
+                        <td>@{{item.nomortelpon}}</td>
                         <td><img src="{{env('API_URL')}}/@{{item.foto}}" style="width:100px;height:100px"></td>
                         <td>
                             <button class="btn btn-success"><i class="fa fa-edit"></i>Ubah</button> 
@@ -117,14 +113,14 @@
 @endsection
 @push('angularscript')
  <script>
-    var app = angular.module('siswaapp',['ngFileUpload']);
+    var app = angular.module('guruapp',['ngFileUpload']);
     app.factory('crudAPIFactory', function($http) {
     var crudFactory = {};
 
     //Get Company List
     crudFactory.getCompanyList = function() {
     return $http({
-            url: "/api/siswa",
+            url: "/api/guru",
             method: 'GET'
             });
     };
@@ -132,7 +128,7 @@
     //Insert new Company.
     crudFactory.createdata = function (Company) {
     return $http({
-            url: '/api/siswa',
+            url: '/api/guru',
             method: 'POST',
             data : Company
         });
@@ -158,14 +154,14 @@
     //Delete Company.
     crudFactory.deleteSiswa = function (Company) {
     return  $http({
-            url: '/api/siswa/'+ Company.id,
+            url: '/api/guru/'+ Company.id,
             method: 'DELETE',
         });
     };    
 
     return crudFactory;
     });
-    app.controller('siswactrl',function($scope,$http,crudAPIFactory,$q,$timeout,Upload){
+    app.controller('guructrl',function($scope,$http,crudAPIFactory,$q,$timeout,Upload){
         var deferred =  $q.defer();
         $scope.getdata = function(){
             crudAPIFactory.getCompanyList().then(function(res){
@@ -179,15 +175,14 @@
         $scope.simpan = function(file){
             console.log(file)
             file.upload = Upload.upload({
-                url: '/api/siswa',
+                url: '/api/guru',
                 data: {
                         nama: $scope.nama, 
-                        email:$scope.email,
+                        nomortelpon:$scope.nomortelpon,
                         tempatlahir:$scope.tempatlahir,
                         alamat:$scope.alamat,
                         tanggallahir:$scope.tanggallahir,
                         jeniskelamin:$scope.jeniskelamin,
-                        kelas:$scope.kelas,
                         file: file
                     },
             });

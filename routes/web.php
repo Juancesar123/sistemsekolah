@@ -19,3 +19,6 @@ Route::get('/siswa', function () {
     return view('pages.siswaview');
 });
 
+Route::get('/guru', function () {
+    return view('pages.masterdataguru');
+});

@@ -37,6 +37,7 @@ class siswa extends Controller
     public function store(Request $request)
     {
         $client = new Client();
+      //  echo $request->file->getClientOriginalName();
         $kirim = $client->post(env('API_URL').'/siswa',[
             // 'headers' => [
             //         'Authorization' => 'Bearer ' . $token
@@ -59,9 +60,17 @@ class siswa extends Controller
                     'contents'=>$request->tempatlahir
                 ],
                 [
+                    'name'=> 'jeniskelamin',
+                    'contents'=>$request->jeniskelamin
+                ],
+                [
+                    'name'=> 'kelas',
+                    'contents'=>$request->kelas
+                ],
+                [
                     'name' =>'foto',
-                    'contents'=> fopen($request->pathfile,'r'),
-                    'filename' =>$request->pathfile->getClientOriginalName()
+                    'contents'=> fopen($request->file,'r'),
+                    'filename' =>$request->file->getClientOriginalName()
                 ],
                 [
                     'name' => 'tanggallahir',
@@ -69,6 +78,7 @@ class siswa extends Controller
                 ]
             ]
         ]);
+        echo $kirim->getBody();
     }
 
     /**
@@ -113,6 +123,9 @@ class siswa extends Controller
      */
     public function destroy($id)
     {
-        //
+        $client = new Client();
+        $kirim = $client->delete(env('API_URL')."/"."siswa/".$id);
+        echo $kirim->getBody();
+        
     }
 }
