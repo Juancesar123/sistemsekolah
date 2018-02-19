@@ -35,7 +35,7 @@
           <ul class="treeview-menu">
             <li  class="{{ Request::path() == 'siswa' ? 'active' : '' }}"><a href="/siswa"><i class="fa fa-circle-o"></i> Siswa</a></li>
             <li  class="{{ Request::path() == 'guru' ? 'active' : '' }}"><a href="/guru"><i class="fa fa-circle-o"></i>Guru</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i>Kelas</a></li>
+            <li  class="{{ Request::path() == 'kelas' ? 'active' : '' }}"><a href="/kelas"><i class="fa fa-circle-o"></i>Kelas</a></li>
             <li><a href="index2.html"><i class="fa fa-circle-o"></i>Sekolah</a></li>
           </ul>
         </li>

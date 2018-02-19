@@ -22,3 +22,6 @@ Route::get('/siswa', function () {
 Route::get('/guru', function () {
     return view('pages.masterdataguru');
 });
+Route::get('/kelas', function () {
+    return view('pages.masterdatakelas');
+});
