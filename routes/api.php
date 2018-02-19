@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('siswa', 'siswa');
 Route::resource('guru', 'guruController');
 Route::resource('kelas', 'kelasController');
+Route::resource('users', 'usersController');
