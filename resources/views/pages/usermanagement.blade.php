@@ -2,12 +2,12 @@
  @push('sectionheader')
  <section class="content-header">
     <h1>
-    Users Sekolah
-    <small>Users</small>
+    Users Guru
+    <small>Users Guru</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Users</li>
+        <li class="active">Users Guru</li>
     </ol>
 </section>
 @endpush
@@ -101,8 +101,8 @@
                         <td>@{{item.status}}</td>
                         <td><span class="label label-success"  ng-show="item.statusactive == 'active'">@{{item.statusactive}}</span><span class="label label-danger"  ng-show="item.statusactive == 'blocked'">@{{item.statusactive}}</span><span class="label label-warning"  ng-show="item.statusactive == 'new'">pending</span></td>
                         <td>
-                            <button class="btn btn-success" ng-click="edit(item)" data-target="#myModal1" data-toggle="modal"><i class="fa fa-edit"></i>Ubah</button> 
-                            <button class="btn btn-danger" ng-click="hapus(item)"><i class="fa fa-user-times"></i> Blocked</button>
+                            <button class="btn btn-success" ng-click="activate(item)" ng-disabled="item.statusactive =='active' || item.statusactive =='blocked'"><i class="fa fa-check"></i>Activate</button> 
+                            <button class="btn btn-danger" ng-click="hapus(item)" ng-disabled="item.statusactive =='blocked'"><i class="fa fa-user-times"></i> Blocked</button>
                         </td>
                     </tr>
                 </tbody>
@@ -135,10 +135,11 @@
     };
 
     //Get Company.
-    crudFactory.getCompany = function (Company) {
+    crudFactory.changestatus = function (Company) {
     return  $http({
-        url: "http://localhost:8080/SpringMavenRestDemoService/getcompany/" + Company.id,
-        method: 'GET',
+        url: "/api/users/changestatus",
+        method: 'POST',
+        data:Company
     });
     };
 
@@ -182,7 +183,33 @@
         }
         $scope.hapus = function(item){
             //console.log(item);
-            crudAPIFactory.deleteSiswa(item).then(function(){
+            swal({
+                    title: "Apakah anda yakin block user ini?",
+                    text: "sekali anda block, anda tidak dapat mengaktivasi lagi!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        let data = {"statusactive":"blocked","id":item.id}
+                        crudAPIFactory.changestatus(data).then(function(){
+                            swal("User sukses di block!", {
+                                icon: "success",
+                            });
+                            deferred.resolve($scope.getdata())
+                        },function(err){
+                            deferred.reject(err);
+                        })
+                        return deferred.promise;
+                    } else {
+                       return false;
+                    }
+                });
+        }
+        $scope.activate = function(item){
+            let data = {"statusactive":"active","id":item.id}
+            crudAPIFactory.changestatus(data).then(function(){
                 deferred.resolve($scope.getdata())
             },function(err){
                 deferred.reject(err);

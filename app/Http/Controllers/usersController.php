@@ -14,7 +14,13 @@ class usersController extends Controller
     public function index()
     {
         $client = new Client();
-        $kirim = $client->get(env('API_URL').'/users');
+        $kirim = $client->get(env('API_URL').'/users/status/guru');
+        return $kirim->getBody();
+    }
+    public function getsiswa()
+    {
+        $client = new Client();
+        $kirim = $client->get(env('API_URL').'/users/status/siswa');
         return $kirim->getBody();
     }
 
@@ -108,7 +114,7 @@ class usersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         $client = new Client();
         $kirim = $client->put(env('API_URL')."/".'users/'.$id,[
@@ -117,6 +123,17 @@ class usersController extends Controller
             // ],
             'form_params' => [
                 'statusactive' => 'blocked',
+            ]
+        ]);
+    }
+    public function changestatus(Request $request){
+        $client = new Client();
+        $kirim = $client->put(env('API_URL')."/".'users/'.$request->id,[
+            // 'headers' => [
+            //         'Authorization' => 'Bearer ' . $token
+            // ],
+            'form_params' => [
+                'statusactive' => $request->statusactive,
             ]
         ]);
     }

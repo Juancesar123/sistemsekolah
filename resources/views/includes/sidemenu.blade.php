@@ -46,7 +46,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li  class="{{ Request::path() == 'users' ? 'active' : '' }}"><a href="/users"><i class="fa fa-circle-o"></i>Users</a></li>
+            <li  class="{{ Request::path() == 'users' ? 'active' : '' }}"><a href="/users"><i class="fa fa-circle-o"></i>Users Guru</a></li>
+            <li  class="{{ Request::path() == 'userapproval' ? 'active' : '' }}"><a href="/userapproval"><i class="fa fa-circle-o"></i>Users Siswa</a></li>
           </ul>
         </li>
         <li class="treeview">

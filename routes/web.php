@@ -11,20 +11,29 @@
 |
 */
 
+Route::group(['middleware'=>'checksession'],function(){
+    Route::get('/dashboard', function () {
+        return view('layouts.dashboard');
+    });    
+    Route::get('/siswa', function () {
+        return view('pages.siswaview');
+    });
+    Route::get('/guru', function () {
+        return view('pages.masterdataguru');
+    });
+    Route::get('/kelas', function () {
+        return view('pages.masterdatakelas');
+    });
+    Route::get('/users', function () {
+        return view('pages.usermanagement');
+    });
+    Route::get('/userapproval', function () {
+        return view('pages.userapproval');
+    });
+});
 Route::get('/', function () {
-    return view('layouts.dashboard');
+    return view('pages.login');
 });
-
-Route::get('/siswa', function () {
-    return view('pages.siswaview');
-});
-
-Route::get('/guru', function () {
-    return view('pages.masterdataguru');
-});
-Route::get('/kelas', function () {
-    return view('pages.masterdatakelas');
-});
-Route::get('/users', function () {
-    return view('pages.usermanagement');
-});
+Route::post('/authentication','usersController@auth');
+Route::post('/api/users/changestatus','usersController@changestatus');
+Route::get('/users/statussiswa','usersController@getsiswa');
