@@ -23,7 +23,25 @@ class usersController extends Controller
         $kirim = $client->get(env('API_URL').'/users/status/siswa');
         return $kirim->getBody();
     }
-
+    public function auth(Request $request){
+        $client = new Client();
+        $kirim = $client->post(env('API_URL').'/authentication',[
+            // 'headers' => [
+            //         'Authorization' => 'Bearer ' . $token
+            // ],
+            'form_params' => [
+                'email' => $request->email,
+                'password' => MD5($request->password)
+            ]
+        ]);
+        $data = $kirim->getBody();
+        if($data == ''){
+           return redirerct('/');
+        }else{
+            session(['key' => (String)$kirim->getBody()]);
+            return redirect('/dashboard');
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

@@ -18,7 +18,8 @@ class checksession
         if($request->session()->get('key') == null){
             return redirect('/');
         }else{
-            return redirect('/dashboard');
+            return $next($request);
         }
+     
     }
 }
