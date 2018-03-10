@@ -20,3 +20,4 @@ Route::resource('siswa', 'siswa');
 Route::resource('guru', 'guruController');
 Route::resource('kelas', 'kelasController');
 Route::resource('users', 'usersController');
+Route::resource('rangkumannilai', 'rangkumannilaiController');

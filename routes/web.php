@@ -30,6 +30,9 @@ Route::group(['middleware'=>'checksession'],function(){
     Route::get('/userapproval', function () {
         return view('pages.userapproval');
     });
+    Route::get('/rangkumannilai', function () {
+        return view('pages.rangkumannilai');
+    });
 });
 Route::get('/', function () {
     return view('pages.login');
@@ -37,3 +40,4 @@ Route::get('/', function () {
 Route::post('/authentication','usersController@auth');
 Route::post('/api/users/changestatus','usersController@changestatus');
 Route::get('/users/statussiswa','usersController@getsiswa');
+Route::get('/logout','usersController@logout');

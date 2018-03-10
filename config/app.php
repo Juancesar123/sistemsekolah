@@ -161,6 +161,8 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Laracasts\Flash\FlashServiceProvider::class,
+
     ],
 
     /*

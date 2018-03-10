@@ -15,7 +15,7 @@ class checksession
      */
     public function handle($request, Closure $next)
     {
-        if($request->session()->get('key') == null){
+        if($request->session()->get('name') == null){
             return redirect('/');
         }else{
             return $next($request);

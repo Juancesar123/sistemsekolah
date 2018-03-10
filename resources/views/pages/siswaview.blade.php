@@ -38,6 +38,73 @@
                     </div>
                     <div class="form-group">
                         <label>Kelas:</label>
+                        <select class="form-control" ng-model="kelas">
+                            <option ng-repeat = "item in datakelas" value="@{{item.id}}">@{{item.kelas}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Kelamin:</label>
+                        <select class="form-control" ng-model="jeniskelamin">
+                            <option value="laki-laki">Laki-Laki</option>
+                            <option value="perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tempat Lahir:</label>
+                        <input type="text" class="form-control" ng-model="tempatlahir">
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal Lahir:</label>
+                        <input type="date" class="form-control" ng-model="tanggallahir">
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat:</label>
+                        <textarea class="form-control" ng-model="alamat"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Foto:</label>
+                        <input type="file" ngf-select ng-model="picFile" name="file"    
+                                accept="image/*" ngf-max-size="2MB" required
+                                ngf-model-invalid="errorFile">
+                        <i ng-show="myForm.file.$error.required">*required</i><br>
+                        <i ng-show="myForm.file.$error.maxSize">File too large 
+                            @{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                        <img ng-show="myForm.file.$valid" ngf-thumbnail="picFile" class="thumb" style="width:500px;height:300px">
+                        <button class="btn btn-danger" ng-click="picFile = null" ng-show="picFile"><i class="fa fa-trash"></i> Remove</button>
+                        <span class="progress" ng-show="picFile.progress >= 0">
+                        <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:@{{picFile.progress}}%"  ng-bind="picFile.progress + '%'">
+                        </div>
+                        </span>
+                        <span class="err" ng-show="errorMsg">@{{errorMsg}}</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="simpan(picFile)"><i class="fa fa-send"></i> Submit </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="myModal1" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Update Data Siswa</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nama:</label>
+                        <input type="text" class="form-control" ng-model="nama">
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="text" class="form-control" ng-model="email">
+                    </div>
+                    <div class="form-group">
+                        <label>Kelas:</label>
                         <input type="text" class="form-control" ng-model="kelas">
                     </div>
                     <div class="form-group">
@@ -67,7 +134,7 @@
                         <i ng-show="myForm.file.$error.required">*required</i><br>
                         <i ng-show="myForm.file.$error.maxSize">File too large 
                             @{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-                        <img ng-show="myForm.file.$valid" ngf-thumbnail="picFile" class="thumb" style="width:100px;height:100px">
+                        <img ng-show="myForm.file.$valid" ngf-thumbnail="picFile" class="thumb" style="width:500px;height:300px">
                         <button class="btn btn-danger" ng-click="picFile = null" ng-show="picFile"><i class="fa fa-trash"></i> Remove</button>
                         <span class="progress" ng-show="picFile.progress >= 0">
                         <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:@{{picFile.progress}}%"  ng-bind="picFile.progress + '%'">
@@ -77,7 +144,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" ng-click="simpan(picFile)"><i class="fa fa-send"></i> Submit </button>
+                    <button class="btn btn-primary" ng-click="actionupdate(picFile)"><i class="fa fa-send"></i> Submit </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
                 </div>
                 </div>
@@ -105,7 +172,7 @@
                         <td>@{{item.tanggallahir}}</td>
                         <td><img src="{{env('API_URL')}}/@{{item.foto}}" style="width:100px;height:100px"></td>
                         <td>
-                            <button class="btn btn-success"><i class="fa fa-edit"></i>Ubah</button> 
+                            <button class="btn btn-success" ng-click="edit(item)"><i class="fa fa-edit"></i>Ubah</button> 
                             <button class="btn btn-danger" ng-click="hapus(item)"><i class="fa fa-trash"></i>Hapus</button>
                         </td>
                     </tr>
@@ -147,11 +214,10 @@
     };
 
     //Update Company.
-    crudFactory.updateCompany = function (Company) {
+    crudFactory.kelasdata = function () {
         return  $http({
-            url: 'http://localhost:8080/SpringMavenRestDemoService/updatecompany/',
-            method: 'POST',
-            data : Company,
+            url: '/api/kelas',
+            method: 'GET',
         });
         };
 
@@ -216,6 +282,16 @@
             })
             return deferred.promise;
         }
+        $scope.getdatakelas = function(){
+            crudAPIFactory.kelasdata().then(function(data){
+                console.log(data);
+                deferred.resolve($scope.datakelas = data.data);
+            },function(err){
+                deferred.reject(err)
+            })
+            return deferred.promise;
+        }
+        $scope.getdatakelas();
      
     });
     

@@ -36,11 +36,24 @@ class usersController extends Controller
         ]);
         $data = $kirim->getBody();
         if($data == ''){
-           return redirerct('/');
+            flash('Gagal Cek Username atau Password')->error();
+           return redirect('/');
         }else{
-            session(['key' => (String)$kirim->getBody()]);
-            return redirect('/dashboard');
+
+            $test = (String)$data;
+            $test1 = json_decode($test);
+            if($test1->statusactive == 'blocked' || $test1->statusactive == 'disapprove'){
+                flash('Gagal Status Nonactive atau di blok mohon kontak admin')->error();
+                return redirect('/');
+            }else{
+                session(['name' => $test1->name,'status' => $test1->status]);
+                return redirect('/dashboard');
+            }
         }
+    }
+    public function logout(Request $request){
+        $request->session()->flush();
+        return redirect('/');
     }
     /**
      * Show the form for creating a new resource.
