@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
-class rangkumannilaiController extends Controller
+class jadwalpelajaranController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class rangkumannilaiController extends Controller
     public function index()
     {
         $client = new Client();
-        $kirim = $client->get(env('API_URL').'/rangkumannilai');
-        return $kirim->getBody();  
+        $kirim = $client->get(env('API_URL').'/jadwalpelajaran');
+        return $kirim->getBody();
     }
 
     /**
@@ -25,7 +25,7 @@ class rangkumannilaiController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -37,17 +37,16 @@ class rangkumannilaiController extends Controller
     public function store(Request $request)
     {
         $client = new Client();
-        $kirim = $client->post(env('API_URL').'/rangkumannilai',[
+        $kirim = $client->post(env('API_URL').'/jadwalpelajaran',[
             // 'headers' => [
             //         'Authorization' => 'Bearer ' . $token
             // ],
             'form_params' => [
-                'idsiswa' => $request->idsiswa,
-                'tugas' => $request->tugas,
-                'nilaiharian' => $request->harian,
-                'ukk' => $request->ukk,
-                'uts' => $request->uts,
-                'totalnilai' => $request->totalnilai,
+                'matapelajaran' => $request->matapelajaran,
+                'idkelas' => $request->idkelas,
+                'jammulai' => $request->jammulai,
+                'jamselesai' => $request->jamselesai,
+                'hari' => $request->hari,
             ]
         ]);
     }
@@ -84,17 +83,16 @@ class rangkumannilaiController extends Controller
     public function update(Request $request, $id)
     {
         $client = new Client();
-        $kirim = $client->put(env('API_URL')."/"."rangkumannilai/".$id,[
+        $kirim = $client->put(env('API_URL')."/"."jadwalpelajaran/".$id,[
             // 'headers' => [
             //         'Authorization' => 'Bearer ' . $token
             // ],
             'form_params' => [
-                'idsiswa' => $request->idsiswa,
-                'tugas' => $request->tugas,
-                'nilaiharian' => $request->harian,
-                'ukk' => $request->ukk,
-                'uts' => $request->uts,
-                'totalnilai' => $request->totalnilai,
+                'matapelajaran' => $request->matapelajaran,
+                'idkelas' => $request->idkelas,
+                'jammulai' => $request->jammulai,
+                'jamselesai' => $request->jamselesai,
+                'hari' => $request->hari,
             ]
         ]);
     }
@@ -108,6 +106,6 @@ class rangkumannilaiController extends Controller
     public function destroy($id)
     {
         $client = new Client();
-        $kirim = $client->delete(env('API_URL')."/"."rangkumannilai/".$id);
+        $kirim = $client->delete(env('API_URL')."/"."jadwalpelajaran/".$id);
     }
 }

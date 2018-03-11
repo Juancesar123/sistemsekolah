@@ -30,6 +30,9 @@ Route::group(['middleware'=>'checksession'],function(){
     Route::get('/userapproval', function () {
         return view('pages.userapproval');
     });
+    Route::get('/jadwalpelajaran', function () {
+        return view('pages.jadwalpelajaran');
+    });
     Route::get('/rangkumannilai', function () {
         return view('pages.rangkumannilai');
     });

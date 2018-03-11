@@ -36,7 +36,7 @@
                         input-name="testing"
                         placeholder="Cari Nama Siswa"
                         pause="100"
-                        selected-object="id"
+                        selected-object="nama"
                         image-field="foto"
                         local-data="datakelas"
                         search-fields="nama"
@@ -85,7 +85,19 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Nama:</label>
-                        <input type="text" class="form-control" ng-model="nama">
+                        <angucomplete-alt id="ex1"
+                        ng-model="testing"
+                        input-name="testing"
+                        placeholder="Cari Nama Siswa"
+                        pause="100"
+                        selected-object="nama"
+                        image-field="foto"
+                        local-data="datakelas"
+                        search-fields="nama"
+                        title-field="nama"
+                        minlength="1"
+                        input-class="form-control form-control-small"
+                        matchclass="highlight"/>
                     </div>
                     <div class="form-group">
                         <label>Nilai rata-rata Tugas:</label>
@@ -101,11 +113,11 @@
                     </div>
                     <div class="form-group">
                         <label>Nilai UKK:</label>
-                        <input type="text" class="form-control" ng-model="ukk">
+                        <input type="text" class="form-control" ng-model="ukk" ng-blur="sumIs()">
                     </div>
                     <div class="form-group">
                         <label>Total Nilai:</label>
-                        <input type="text" class="form-control" ng-model="total" value="@{{ukk}}"disabled>
+                        <input type="text" class="form-control" ng-model="totalnilai" disabled>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -118,14 +130,16 @@
             <table class="table bordered-stripped">
                 <thead>
                     <th>Nama</th>
-                    <th>Kelas</th>
+                    <th>Nilai UTS</th>
+                    <th>Nilai UKK</th>
                     <th>Total Nilai</th>
                     <th>Action</th>
                 </thead>
                 <tbody>
                     <tr ng-repeat="item in data">
-                        <td>@{{item.nama}}</td>
-                        <td>@{{item.kelas}}</td>
+                        <td>@{{item.idsiswa}}</td>
+                        <td>@{{item.uts}}</td>
+                        <td>@{{item.ukk}}</td>
                         <td>@{{item.totalnilai}}</td>
                         <td>
                             <button class="btn btn-success" ng-click="edit(item)" data-target="#myModal1" data-toggle="modal"><i class="fa fa-edit"></i>Ubah</button> 
@@ -168,18 +182,18 @@
     };
 
     //Update Company.
-    crudFactory.updateCompany = function (Company,id) {
+    crudFactory.updaterangkumannilai = function (Company,id) {
         return  $http({
-            url: '/api/kelas/'+id,
+            url: '/api/rangkumannilai/'+id,
             method: 'PUT',
             data : Company,
         });
         };
 
     //Delete Company.
-    crudFactory.deleteSiswa = function (Company) {
+    crudFactory.deleterangkumannilai = function (Company) {
     return  $http({
-            url: '/api/kelas/'+ Company.id,
+            url: '/api/rangkumannilai/'+ Company.id,
             method: 'DELETE',
         });
     };    
@@ -210,20 +224,20 @@
         $scope.getdata();
         $scope.getdatakelas();
         $scope.sumIs = function(){
-            $scope.totalnilai = parseInt($scope.uts) + parseInt($scope.ukk) + parseInt($scope.harian) + parseInt($scope.tugas)/4;
+            $scope.totalnilai = (parseInt($scope.uts) + parseInt($scope.ukk) + parseInt($scope.harian) + parseInt($scope.tugas))/4;
             console.log();
         }
         $scope.simpan = function(){
-            let data = {"idsiswa":$scope.id.originalObject.id,"tugas":$scope.tugas,"harian":$Scope.harian,"uts":$scope.uts,"ukk":$scope.ukk}
+            let data = {"idsiswa":$scope.nama.originalObject.id,"tugas":$scope.tugas,"harian":$scope.harian,"uts":$scope.uts,"ukk":$scope.ukk,"totalnilai":$scope.totalnilai}
             crudAPIFactory.createdata(data).then(function(){
-                deferred.resolve($scope.getdatarangkuman())
+                deferred.resolve($scope.getdata())
             },function(){
                 deferred.reject()
             })
         }
         $scope.hapus = function(item){
             //console.log(item);
-            crudAPIFactory.deleteSiswa(item).then(function(){
+            crudAPIFactory.deleterangkumannilai(item).then(function(){
                 deferred.resolve($scope.getdata())
             },function(err){
                 deferred.reject(err);
@@ -231,13 +245,18 @@
             return deferred.promise;
         }
         $scope.edit = function(item){
-            $scope.kelas = item.kelas;
+            $scope.nama = item.idsiswa;
+            $scope.uts = item.uts;
+            $scope.ukk = item.ukk;
+            $scope.tugas = item.tugas;
+            $scope.harian = item.nilaiharian;
+            $scope.totalnilai = item.totalnilai;
             $scope.id = item.id;
         }
         $scope.actionedit = function(){
             var id = $scope.id;
-            let data = {"kelas":$scope.kelas,"idsekolah":"1"}
-            crudAPIFactory.updateCompany(data,id).then(function(res){
+            let data = {"idsiswa":$scope.nama.originalObject.id,"tugas":$scope.tugas,"harian":$scope.harian,"uts":$scope.uts,"ukk":$scope.ukk,"totalnilai":$scope.totalnilai}
+            crudAPIFactory.updaterangkumannilai(data,id).then(function(res){
                 deferred.resolve($scope.getdata())
             },function(res){
                 deferred.reject(res);
