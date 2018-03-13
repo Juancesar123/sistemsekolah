@@ -33,20 +33,22 @@
                         <input type="text" class="form-control" ng-model="matapelajaran">
                     </div>
                     <div class="form-group">
-                        <label>Hari:</label>
-                        <input type="text" class="form-control" ng-model="hari">
+                        <label>Tanggal:</label>
+                        <input type="date" class="form-control" ng-model="tanggal">
                     </div>
                     <div class="form-group">
                         <label>Jam Masuk:</label>
-                        <input type="text" class="form-control" ng-model="jammasuk">
+                        <input type="time" class="form-control" ng-model="jammasuk">
                     </div>
                     <div class="form-group">
                         <label>Jam Keluar:</label>
-                        <input type="text" class="form-control" ng-model="jamkeluar">
+                        <input type="time" class="form-control" ng-model="jamkeluar">
                     </div>
                     <div class="form-group">
                         <label>Kelas:</label>
-                        <input type="text" class="form-control" ng-model="kelas">
+                        <select class="form-control" ng-model="kelas">
+                            <option ng-repeat="item in datakelas" value="@{{item.id}}">@{{item.kelas}}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -66,26 +68,28 @@
                     <h4 class="modal-title">Ubah Data Jadwal Pelajaran</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>Nama Matapelajaran:</label>
-                        <input type="text" class="form-control" ng-model="matapelajaran">
-                    </div>
-                    <div class="form-group">
-                        <label>Hari:</label>
-                        <input type="text" class="form-control" ng-model="hari">
-                    </div>
-                    <div class="form-group">
-                        <label>Jam Masuk:</label>
-                        <input type="text" class="form-control" ng-model="jammasuk">
-                    </div>
-                    <div class="form-group">
-                        <label>Jam Keluar:</label>
-                        <input type="text" class="form-control" ng-model="jamkeluar">
-                    </div>
-                    <div class="form-group">
-                        <label>Kelas:</label>
-                        <input type="text" class="form-control" ng-model="kelas">
-                    </div>
+                        <div class="form-group">
+                                <label>Nama Matapelajaran:</label>
+                                <input type="text" class="form-control" ng-model="matapelajaran">
+                            </div>
+                            <div class="form-group">
+                                <label>Tanggal:</label>
+                                <input type="date" class="form-control" ng-model="tanggal">
+                            </div>
+                            <div class="form-group">
+                                <label>Jam Masuk:</label>
+                                <input type="time" class="form-control" ng-model="jammasuk">
+                            </div>
+                            <div class="form-group">
+                                <label>Jam Keluar:</label>
+                                <input type="time" class="form-control" ng-model="jamkeluar">
+                            </div>
+                            <div class="form-group">
+                                <label>Kelas:</label>
+                                <select class="form-control" ng-model="kelas">
+                                    <option ng-repeat="item in datakelas" value="@{{item.id}}">@{{item.kelas}}</option>
+                                </select>
+                            </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" ng-click="actionedit()"><i class="fa fa-send"></i> Submit </button>
@@ -97,7 +101,7 @@
             <table class="table bordered-stripped">
                 <thead>
                     <th>Mata Pelajaran</th>
-                    <th>Hari</th>
+                    <th>Tanggal</th>
                     <th>Jam Mulai</th>
                     <th>Jam Selesai</th>
                     <th>Kelas</th>
@@ -106,10 +110,10 @@
                 <tbody>
                     <tr ng-repeat="item in data">
                         <td>@{{item.matapelajaran}}</td>
-                        <td>@{{item.hari}}</td>
-                        <td>@{{item.jammulai}}</td>
+                        <td>@{{item.tanggal}}</td>
+                        <td>@{{item.jammasuk}}</td>
                         <td>@{{item.jamselesai}}</td>
-                        <td>@{{item.idkelas}}</td>
+                        <td>@{{item.id_kelas}}</td>
                         <td>
                             <button class="btn btn-success" ng-click="edit(item)" data-target="#myModal1" data-toggle="modal"><i class="fa fa-edit"></i>Ubah</button> 
                             <button class="btn btn-danger" ng-click="hapus(item)"><i class="fa fa-trash"></i>Hapus</button>
@@ -145,9 +149,9 @@
     };
 
     //Get Company.
-    crudFactory.getCompany = function (Company) {
+    crudFactory.getDatakelas = function (Company) {
     return  $http({
-        url: "http://localhost:8080/SpringMavenRestDemoService/getcompany/" + Company.id,
+        url: "/api/kelas",
         method: 'GET',
     });
     };
@@ -174,17 +178,27 @@
     app.controller('jadwalpelajaranctrl',function($scope,$http,crudAPIFactory,$q,$timeout,Upload){
         var deferred =  $q.defer();
         $scope.getdata = function(){
-            crudAPIFactory.getCompanyList().then(function(res){
+            crudAPIFactory.getMatapelajaran().then(function(res){
                 deferred.resolve($scope.data = res.data);
             },function(res){
                 deferred.reject(res);
             });
             return deferred.promise;
         }
+        $scope.getdatakelas = function(){
+            crudAPIFactory.getDatakelas().then(function(res){
+                deferred.resolve($scope.datakelas = res.data);
+                console.log(res.data);
+            },function(res){
+                deferred.reject(res);
+            });
+            return deferred.promise;
+        }
+        $scope.getdatakelas();
         $scope.getdata();
         $scope.simpan = function(){
-            let data = {"kelas":$scope.kelas,"idsekolah":"1"}
-            crudAPIFactory.createdata(data).then(function(){
+            let data = {"kelas":$scope.kelas,"matapelajaran":$scope.matapelajaran,"jammasuk":$scope.jammasuk,"jamkeluar":$scope.jamkeluar,"tanggal":$scope.tanggal}
+            crudAPIFactory.createMatapelajaran(data).then(function(){
                 deferred.resolve($scope.getdata())
             },function(){
                 deferred.reject()
@@ -192,7 +206,7 @@
         }
         $scope.hapus = function(item){
             //console.log(item);
-            crudAPIFactory.deleteSiswa(item).then(function(){
+            crudAPIFactory.deleteMatapelajaran(item).then(function(){
                 deferred.resolve($scope.getdata())
             },function(err){
                 deferred.reject(err);
@@ -201,12 +215,16 @@
         }
         $scope.edit = function(item){
             $scope.kelas = item.kelas;
+            $scope.matapelajaran = item.matapelajaran;
             $scope.id = item.id;
+            $scope.tanggal = new Date(item.tanggal);
+            $scope.jammasuk = new Date(item.jammasuk);
+            $scope.jamkeluar = new Date(item.jamselesai);
         }
         $scope.actionedit = function(){
             var id = $scope.id;
-            let data = {"kelas":$scope.kelas,"idsekolah":"1"}
-            crudAPIFactory.updateCompany(data,id).then(function(res){
+            let data = {"kelas":$scope.kelas,"matapelajaran":$scope.matapelajaran,"jammasuk":$scope.jammasuk,"jamkeluar":$scope.jamkeluar,"tanggal":$scope.tanggal}
+            crudAPIFactory.updateMatapelajaran(data,id).then(function(res){
                 deferred.resolve($scope.getdata())
             },function(res){
                 deferred.reject(res);

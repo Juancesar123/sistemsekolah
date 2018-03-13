@@ -43,10 +43,10 @@ class jadwalpelajaranController extends Controller
             // ],
             'form_params' => [
                 'matapelajaran' => $request->matapelajaran,
-                'idkelas' => $request->idkelas,
-                'jammulai' => $request->jammulai,
-                'jamselesai' => $request->jamselesai,
-                'hari' => $request->hari,
+                'id_kelas' => $request->kelas,
+                'jammasuk' => $request->jammasuk,
+                'jamselesai' => $request->jamkeluar,
+                'tanggal' => $request->tanggal,
             ]
         ]);
     }
@@ -89,10 +89,10 @@ class jadwalpelajaranController extends Controller
             // ],
             'form_params' => [
                 'matapelajaran' => $request->matapelajaran,
-                'idkelas' => $request->idkelas,
-                'jammulai' => $request->jammulai,
-                'jamselesai' => $request->jamselesai,
-                'hari' => $request->hari,
+                'id_kelas' => $request->kelas,
+                'jammasuk' => $request->jammasuk,
+                'jamselesai' => $request->jamkeluar,
+                'tanggal' => $request->tanggal,
             ]
         ]);
     }
