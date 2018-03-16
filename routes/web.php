@@ -36,6 +36,9 @@ Route::group(['middleware'=>'checksession'],function(){
     Route::get('/rangkumannilai', function () {
         return view('pages.rangkumannilai');
     });
+    Route::get('/rekapabsen', function () {
+        return view('pages.rekapabsen');
+    });
 });
 Route::get('/', function () {
     return view('pages.login');

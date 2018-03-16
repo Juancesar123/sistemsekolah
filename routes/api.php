@@ -22,3 +22,5 @@ Route::resource('kelas', 'kelasController');
 Route::resource('users', 'usersController');
 Route::resource('rangkumannilai', 'rangkumannilaiController');
 Route::resource('matapelajaran', 'jadwalpelajaranController');
+
+Route::resource('rekapabsen', 'rekapabsen');

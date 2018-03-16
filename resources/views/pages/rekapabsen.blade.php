@@ -14,8 +14,8 @@
 </section>
 @endpush
 @section('content')
-    <div class="box box-primary" ng-app="rangkumannilaiapp">
-    <div ng-controller="rangkumannilaictrl">
+    <div class="box box-primary" ng-app="rekapabsenapp">
+    <div ng-controller="rekapabsensctrl">
         <div class="box-header">
             <button class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i> Tambah Data</button>
         </div>
@@ -46,24 +46,16 @@
                         matchclass="highlight"/>
                     </div>
                     <div class="form-group">
-                        <label>Nilai rata-rata Tugas:</label>
-                        <input type="text" class="form-control" ng-model="tugas">
+                        <label>Ijin:</label>
+                        <input type="text" class="form-control" ng-model="ijin">
                     </div>
                     <div class="form-group">
-                        <label>Nilai rata-rata ulangan harian:</label>
-                        <input type="text" class="form-control" ng-model="harian">
+                        <label>Sakit:</label>
+                        <input type="text" class="form-control" ng-model="sakit">
                     </div>
                     <div class="form-group">
-                        <label>Nilai UTS:</label>
-                        <input type="text" class="form-control" ng-model="uts">
-                    </div>
-                    <div class="form-group">
-                        <label>Nilai UKK:</label>
-                        <input type="text" class="form-control" ng-model="ukk" ng-blur="sumIs()">
-                    </div>
-                    <div class="form-group">
-                        <label>Total Nilai:</label>
-                        <input type="text" class="form-control" ng-model="totalnilai" value="ukk"disabled>
+                        <label>Alfa:</label>
+                        <input type="text" class="form-control" ng-model="alfa">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -80,7 +72,7 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Ubah Data Nilai</h4>
+                    <h4 class="modal-title">Ubah Data Absensi</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -100,24 +92,16 @@
                         matchclass="highlight"/>
                     </div>
                     <div class="form-group">
-                        <label>Nilai rata-rata Tugas:</label>
-                        <input type="text" class="form-control" ng-model="tugas">
+                        <label>Ijin:</label>
+                        <input type="text" class="form-control" ng-model="ijin">
                     </div>
                     <div class="form-group">
-                        <label>Nilai rata-rata ulangan harian:</label>
-                        <input type="text" class="form-control" ng-model="harian">
+                        <label>Sakit:</label>
+                        <input type="text" class="form-control" ng-model="sakit">
                     </div>
                     <div class="form-group">
-                        <label>Nilai UTS:</label>
-                        <input type="text" class="form-control" ng-model="uts">
-                    </div>
-                    <div class="form-group">
-                        <label>Nilai UKK:</label>
-                        <input type="text" class="form-control" ng-model="ukk" ng-blur="sumIs()">
-                    </div>
-                    <div class="form-group">
-                        <label>Total Nilai:</label>
-                        <input type="text" class="form-control" ng-model="totalnilai" disabled>
+                        <label>Alfa:</label>
+                        <input type="text" class="form-control" ng-model="alfa">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -130,17 +114,17 @@
             <table class="table bordered-stripped">
                 <thead>
                     <th>Nama</th>
-                    <th>Nilai UTS</th>
-                    <th>Nilai UKK</th>
-                    <th>Total Nilai</th>
+                    <th>Alfa</th>
+                    <th>Ijin</th>
+                    <th>Sakit</th>
                     <th>Action</th>
                 </thead>
                 <tbody>
                     <tr ng-repeat="item in data">
                         <td>@{{item.idsiswa}}</td>
-                        <td>@{{item.uts}}</td>
-                        <td>@{{item.ukk}}</td>
-                        <td>@{{item.totalnilai}}</td>
+                        <td>@{{item.alfa}}</td>
+                        <td>@{{item.ijin}}</td>
+                        <td>@{{item.sakit}}</td>
                         <td>
                             <button class="btn btn-success" ng-click="edit(item)" data-target="#myModal1" data-toggle="modal"><i class="fa fa-edit"></i>Ubah</button> 
                             <button class="btn btn-danger" ng-click="hapus(item)"><i class="fa fa-trash"></i>Hapus</button>
@@ -154,14 +138,14 @@
 @endsection
 @push('angularscript')
  <script>
-    var app = angular.module('rangkumannilaiapp',['ngFileUpload','angucomplete-alt']);
+    var app = angular.module('rekapabsenapp',['ngFileUpload','angucomplete-alt']);
     app.factory('crudAPIFactory', function($http) {
     var crudFactory = {};
 
     //Get Company List
-    crudFactory.getdatarangkuman = function() {
+    crudFactory.getdataRekapabsen = function() {
     return $http({
-            url: "/api/rangkumannilai",
+            url: "/api/rekapabsen",
             method: 'GET'
             });
     };
@@ -173,36 +157,36 @@
     };
 
     //Insert new Company.
-    crudFactory.createdata = function (Company) {
+    crudFactory.createRekapabsen = function (data) {
     return $http({
-            url: '/api/rangkumannilai',
+            url: '/api/rekapabsen',
             method: 'POST',
-            data : Company
+            data : data
         });
     };
 
     //Update Company.
-    crudFactory.updaterangkumannilai = function (Company,id) {
+    crudFactory.updateRekapabsen = function (data,id) {
         return  $http({
-            url: '/api/rangkumannilai/'+id,
+            url: '/api/rekapabsen/'+id,
             method: 'PUT',
-            data : Company,
+            data : data,
         });
         };
 
     //Delete Company.
-    crudFactory.deleterangkumannilai = function (Company) {
+    crudFactory.deleteRekapabsen = function (Company) {
     return  $http({
-            url: '/api/rangkumannilai/'+ Company.id,
+            url: '/api/rekapabsen/'+ Company.id,
             method: 'DELETE',
         });
     };    
 
     return crudFactory;
     });
-    app.controller('rangkumannilaictrl',function($scope,$http,crudAPIFactory,$q,$timeout,Upload){
+    app.controller('rekapabsensctrl',function($scope,$http,crudAPIFactory,$q,$timeout,Upload){
         var deferred =  $q.defer();
-        $scope.getdatakelas = function(){
+        $scope.getdatasiswa = function(){
             $scope.datakelas = []
             crudAPIFactory.getDataSiswa().then(function(res){
                 res.data.forEach(element => {
@@ -215,21 +199,17 @@
             return deferred.promise;
         }
         $scope.getdata = function(){
-            crudAPIFactory.getdatarangkuman().then(function(res){
+            crudAPIFactory.getdataRekapabsen().then(function(res){
                 deferred.resolve($scope.data = res.data);
             },function(err){
                 deferred.reject(err);
             })
         }
         $scope.getdata();
-        $scope.getdatakelas();
-        $scope.sumIs = function(){
-            $scope.totalnilai = (parseInt($scope.uts) + parseInt($scope.ukk) + parseInt($scope.harian) + parseInt($scope.tugas))/4;
-            console.log();
-        }
+        $scope.getdatasiswa();
         $scope.simpan = function(){
-            let data = {"idsiswa":$scope.nama.originalObject.id,"tugas":$scope.tugas,"harian":$scope.harian,"uts":$scope.uts,"ukk":$scope.ukk,"totalnilai":$scope.totalnilai}
-            crudAPIFactory.createdata(data).then(function(){
+            let data = {"idsiswa":$scope.nama.originalObject.id,"ijin":$scope.ijin,"sakit":$scope.sakit,"alfa":$scope.alfa}
+            crudAPIFactory.createRekapabsen(data).then(function(){
                 deferred.resolve($scope.getdata())
             },function(){
                 deferred.reject()
@@ -237,7 +217,7 @@
         }
         $scope.hapus = function(item){
             //console.log(item);
-            crudAPIFactory.deleterangkumannilai(item).then(function(){
+            crudAPIFactory.deleteRekapabsen(item).then(function(){
                 deferred.resolve($scope.getdata())
             },function(err){
                 deferred.reject(err);
@@ -246,17 +226,15 @@
         }
         $scope.edit = function(item){
             $scope.nama = item.idsiswa;
-            $scope.uts = item.uts;
-            $scope.ukk = item.ukk;
-            $scope.tugas = item.tugas;
-            $scope.harian = item.nilaiharian;
-            $scope.totalnilai = item.totalnilai;
+            $scope.ijin = item.ijin;
+            $scope.sakit = item.sakit;
+            $scope.alfa = item.alfa;
             $scope.id = item.id;
         }
         $scope.actionedit = function(){
             var id = $scope.id;
-            let data = {"idsiswa":$scope.nama.originalObject.id,"tugas":$scope.tugas,"harian":$scope.harian,"uts":$scope.uts,"ukk":$scope.ukk,"totalnilai":$scope.totalnilai}
-            crudAPIFactory.updaterangkumannilai(data,id).then(function(res){
+            let data = {"idsiswa":$scope.nama.originalObject.id,"ijin":$scope.ijin,"sakit":$scope.sakit,"alfa":$scope.alfa}
+            crudAPIFactory.updateRekapabsen(data,id).then(function(res){
                 deferred.resolve($scope.getdata())
             },function(res){
                 deferred.reject(res);
